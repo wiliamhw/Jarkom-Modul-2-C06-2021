@@ -178,6 +178,7 @@ Buat subdomain **super.franky.yyy.com** dengan alias **www.super.franky.yyy.com*
 #### Hasil
 ![Hasil no.3](https://user-images.githubusercontent.com/52129348/138736381-6e9686a2-ea74-45e3-b579-7fbeaf88d308.png)
 
+
 ### No.4
 Buat reverse domain untuk domain utama.
 
@@ -224,4 +225,29 @@ Buat reverse domain untuk domain utama.
 ![Hasil no.4](https://user-images.githubusercontent.com/52129348/138739394-a5f12cb8-2a17-4e25-95f2-9c94039eb5bd.png)
 
 
+### No.5
+Supaya tetap bisa menghubungi Franky jika server **EniesLobby** rusak, maka buat **Water7** sebagai DNS Slave untuk domain utama.
+
+### Jawaban
+1. Edit domain name (zone) `franky.C06.com` pada `/etc/bind/named.conf.local` di node **EniesLobby** menjadi:
+    ```
+    zone "franky.C06.com" {
+        type master;
+        notify yes;
+        also-notify { 10.17.2.3; };
+        allow-transfer { 10.17.2.3; };
+        file "/etc/bind/kaizoku/franky.C06.com";
+    };
+    ```
+2. Tuliskan kode untuk menambah domain name di bawah ini pada `/etc/bind/named.conf.local` di node **Water7**:
+    ```
+    zone "franky.C06.com" {
+        type slave;
+        masters { 10.17.2.2; };
+        file "/var/lib/bind/franky.C06.com";
+    };
+    ```
+
+#### Hasil
+![Screenshot from 2021-10-26 00-42-59](https://user-images.githubusercontent.com/52129348/138744230-a22ad90a-b5ba-4cac-8c3f-2a3f41b89e3b.png)
 
