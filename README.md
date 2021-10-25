@@ -91,6 +91,7 @@ iface eth0 inet static
       nameserver 192.168.122.1
       ```
     2. Install **lynx** dengan perintah `apt get install lynx`.
+    3. Install **dnsutils** dengan perintah `apt-get install dnsutils`.
 3. Pada **EniesLobby** dan **Water7**, 
     1. install dan aktifkan **bind9** dengan perintah:
         ```
@@ -112,7 +113,7 @@ Setelah itu, konfigurasi ini akan disimpan pada `/root/.bashrc`.
 Pada node **EniesLobby** dan di dalam folder **kaizoku**, buat wesite utama dengan URL **franky.C06.com** dan alias **www.franky.C06.com**!
 
 ### Jawaban
-1. Tuliskan kode berikut pada `/root/2.sh`:
+1. Tuliskan kode berikut pada `/root/2.sh` di node **EniesLobby**:
 ```
 #!/bin/bash
 
@@ -149,11 +150,78 @@ www     IN      CNAME   franky.C06.com.
 # Restart bind9
 `service bind9 restart`
 ```
-2. Tuliskan `bash /root/2.sh` pada `/root/.bashrc`.
+2. Tuliskan `bash /root/2.sh` pada `/root/.bashrc` di node **EniesLobby**.
 
 #### Hasil
 ![Hasil no.2](https://user-images.githubusercontent.com/52129348/138732437-fca89a63-2e96-4478-a4ec-43388a433967.png)
 
 
-## No.3
+### No.3
+Buat subdomain **super.franky.yyy.com** dengan alias **www.super.franky.yyy.com** yang diatur DNS nya di **EniesLobby** dan mengarah ke **Skypie**.
+
+### Jawaban
+1. Tuliskan kode berikut pada `/root/3.sh` di node **EniesLobby**:
+	```
+    #!/bin/bash
+
+    # Tambahkan subdomain beserta aliasnya
+    echo "
+    super           IN      A       10.17.2.4
+    www.super       IN      CNAME   super.franky.C06.com
+    " >> /etc/bind/kaizoku/franky.C06.com
+
+    # Restart bind9
+    `service bind9 restart`
+    ```
+2. Tuliskan `bash /root/3.sh` pada `/root/.bashrc` di node **EniesLobby**. 
+
+#### Hasil
+![Hasil no.3](https://user-images.githubusercontent.com/52129348/138736381-6e9686a2-ea74-45e3-b579-7fbeaf88d308.png)
+
+### No.4
+Buat reverse domain untuk domain utama.
+
+### Jawaban
+1. Tuliskan kode berikut pada `/root/4.sh` di node **EniesLobby**:
+	```
+    #!/bin/bash
+
+    # Daftarkan domain name baru
+    echo "
+    zone \"2.17.10.in-addr.arpa\" {
+            type master;
+            file \"/etc/bind/kaizoku/2.17.10.in-addr.arpa\";
+    };
+    " >> /etc/bind/named.conf.local
+
+    # Buat folder kaizoku dan file yang menyimpan konfigurasi DNS
+    [ ! -d "/etc/bind/kaizoku" ] && `mkdir /etc/bind/kaizoku`
+    `cp /etc/bind/db.local /etc/bind/kaizoku/2.17.10.in-addr.arpa`
+
+    # Buat konfigurasi DNS
+    echo "
+    ;
+    ; BIND data file for local loopback interface
+    ;
+    \$TTL    604800
+    @       IN      SOA     franky.C06.com. root.franky.C06.com. (
+                         2021100401         ; Serial
+                             604800         ; Refresh
+                              86400         ; Retry
+                            2419200         ; Expire
+                             604800 )       ; Negative Cache TTL
+    ;
+    2.17.10.in-addr.arpa.      IN      NS      franky.C06.com.
+    4                          IN      PTR     franky.C06.com. ;BYTE kE-4 IP Skypiea
+    " > /etc/bind/kaizoku/2.17.10.in-addr.arpa
+
+    # Restart bind9
+    `service bind9 restart`
+    ```
+2. Tuliskan `bash /root/4.sh` pada `/root/.bashrc` di node **EniesLobby**. 
+
+#### Hasil
+![Hasil no.4](https://user-images.githubusercontent.com/52129348/138739394-a5f12cb8-2a17-4e25-95f2-9c94039eb5bd.png)
+
+
 
