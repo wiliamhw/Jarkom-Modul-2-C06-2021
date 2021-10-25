@@ -85,17 +85,19 @@ iface eth0 inet static
 #### Konfigurasi node agar dapat mengakses internet dan DNS master.
 1. Pada **Foosha**, jalankan `iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.17.0.0/16`.
 2. Pada node **LogueTown** dan **Alabasta**,
-   1. Pada `/etc/resolv.conf`, tuliskan:
+    1. Pada `/etc/resolv.conf`, tuliskan:
       ```
       nameserver 10.17.2.2
       nameserver 192.168.122.1
       ```
-   2. Install **lynx** dengan perintah `apt get install lynx`.
-3. Pada **EniesLobby** dan **Water7**, install dan aktifkan **bind9** dengan perintah:
-    ```
-    apt-get install bind9 -y
-    service bind9 start
-    ```
+    2. Install **lynx** dengan perintah `apt get install lynx`.
+3. Pada **EniesLobby** dan **Water7**, 
+    1. install dan aktifkan **bind9** dengan perintah:
+        ```
+        apt-get install bind9 -y
+        service bind9 start
+        ```
+    2. Pada `/etc/resolv.conf`, tuliskan `nameserver 192.168.122.1`
 4. Pada **Skypiea**, install **apache2** dan **php7.0** serta jalankan **apache2** dengan perintah berikut:
     ```
     apt-get install apache2
@@ -103,3 +105,55 @@ iface eth0 inet static
     apt-get install php
     apt-get install libapache2-mod-php7.0
     ```
+Setelah itu, konfigurasi ini akan disimpan pada `/root/.bashrc`.
+
+
+### No.2
+Pada node **EniesLobby** dan di dalam folder **kaizoku**, buat wesite utama dengan URL **franky.C06.com** dan alias **www.franky.C06.com**!
+
+### Jawaban
+1. Tuliskan kode berikut pada `/root/2.sh`:
+```
+#!/bin/bash
+
+# Mendaftarkan domain name
+echo "
+zone \"franky.C06.com\" {
+        type master;
+        file \"/etc/bind/kaizoku/franky.C06.com\";
+};
+" > /etc/bind/named.conf.local
+
+# Buat folder kaizoku dan file yang menyimpan konfigurasi DNS
+[ ! -d "/etc/bind/kaizoku" ] && `mkdir /etc/bind/kaizoku`
+`cp /etc/bind/db.local /etc/bind/kaizoku/franky.C06.com`
+
+# Buat konfigurasi DNS
+echo "
+;
+; BIND data file for local loopback interface
+;
+\$TTL    604800
+@       IN      SOA     franky.C06.com. root.franky.C06.com. (
+                     2021100401         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      franky.C06.com.
+@       IN      A       10.17.2.4
+www     IN      CNAME   franky.C06.com.
+" > /etc/bind/kaizoku/franky.C06.com
+
+# Restart bind9
+`service bind9 restart`
+```
+2. Tuliskan `bash /root/2.sh` pada `/root/.bashrc`.
+
+#### Hasil
+![Hasil no.2](https://user-images.githubusercontent.com/52129348/138732437-fca89a63-2e96-4478-a4ec-43388a433967.png)
+
+
+## No.3
+
