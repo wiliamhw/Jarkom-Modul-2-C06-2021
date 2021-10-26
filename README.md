@@ -511,3 +511,27 @@ Pada **Skypiea**:
 ![Hasil 11a](https://user-images.githubusercontent.com/52129348/138859376-783acd7b-2570-4668-ae94-85634572db8b.png)
 ![Hasil 11b](https://user-images.githubusercontent.com/52129348/138859402-753ec0e2-b92b-4c8b-9320-9f33ee6dd686.png)
 
+
+### No.12
+Tidak hanya itu, Luffy juga menyiapkan error file `404.html` pada folder `/errors` untuk mengganti error kode pada apache.
+
+#### Jawaban
+Pada **Skypiea**:
+1. Tuliskan kode berikut pada `/root/12.sh`:
+    ```
+    #!/bin/bash
+
+    # Tambahkan konfigurasi pada super.franky.C06.com.conf
+    echo "
+    <Directory /var/www/super.franky.C06.com>
+        ErrorDocument 404 /error/404.html
+    </Directory>
+    " >> /etc/apache2/sites-available/super.franky.C06.com.conf
+    ```
+2. Tuliskan `bash /root/12.sh` pada `/root/.bashrc`.
+
+#### Hasil
+![Hasil 12a](https://user-images.githubusercontent.com/52129348/138882850-25c0160f-f9eb-4050-831c-24f532b2d867.png)
+![Hasil 12b](https://user-images.githubusercontent.com/52129348/138882886-0c86404c-1381-4ca9-add3-694310ec9531.png)
+
+
