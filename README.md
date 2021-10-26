@@ -251,3 +251,69 @@ Supaya tetap bisa menghubungi Franky jika server **EniesLobby** rusak, maka buat
 #### Hasil
 ![Screenshot from 2021-10-26 00-42-59](https://user-images.githubusercontent.com/52129348/138744230-a22ad90a-b5ba-4cac-8c3f-2a3f41b89e3b.png)
 
+
+### No.6
+Setelah itu terdapat subdomain `mecha.franky.yyy.com` dengan alias `www.mecha.franky.yyy.com` yang didelegasikan dari **EniesLobby** ke **Water7** dengan IP menuju ke **Skypie** dalam folder `sunnygo`
+
+### Jawaban
+#### Konfigurasi EniesLobby
+1. Tuliskan kode berikut pada `/root/6.sh`.
+    ```
+    #!/bin/bash
+
+    # Tambahkan nameserver menuju Water7
+    echo "
+    ns2     IN      A       10.17.2.3 ;IP Water7
+    mecha   IN      NS      ns2
+    " >> /etc/bind/kaizoku/franky.C06.com
+    
+    # Restart bind9
+    `service bind9 restart`
+    ```
+2. Tuliskan `bash /root/6.sh` pada `/root/.bashrc.
+3. Edit file `/etc/bind/named.conf.options` dengan mengkomen `dnssec-validation auto;` dan menambahkan `allow-query{any;};`.
+4. Pastikan `allow-transfer { 10.17.2.3; };` sudah tertulis pada zone `franky.C06.com` di file `/etc/bind/named.conf.local`. (merupakan jawaban no.5)
+
+#### Konfigurasi Water7
+1. Tuliskan kode berikut pada `/root/6.sh`.
+    ```
+    #!/bin/bash
+
+    # Daftarkan domain name baru
+    echo "
+    zone \"mecha.franky.C06.com\" {
+            type master;
+            file \"/etc/bind/sunnygo/mecha.franky.C06.com\";
+    };
+    " >> /etc/bind/named.conf.local
+
+    # Buat folder sunnygo dan file yang menyimpan konfigurasi DNS
+    [ ! -d "/etc/bind/sunnygo" ] && `mkdir /etc/bind/sunnygo`
+    `cp /etc/bind/db.local /etc/bind/sunnygo/mecha.franky.C06.com`
+
+    # Buat konfigurasi DNS
+    echo "
+    ;
+    ; BIND data file for local loopback interface
+    ;
+    \$TTL    604800
+    @       IN      SOA     mecha.franky.C06.com. root.mecha.franky.C06.com. (
+                         2021100401         ; Serial
+                             604800         ; Refresh
+                              86400         ; Retry
+                            2419200         ; Expire
+                             604800 )       ; Negative Cache TTL
+    ;
+    @       IN      NS      mecha.franky.C06.com.
+    @       IN      A       10.17.2.4       ; IP Skypie
+    www     IN      CNAME   mecha.franky.C06.com.
+    " > /etc/bind/sunnygo/mecha.franky.C06.com
+
+    # Restart bind9
+    `service bind9 restart`
+    ```
+3. Tuliskan `bash /root/6.sh` pada `/root/.bashrc.
+4. Edit file `/etc/bind/named.conf.options` dengan mengkomen `dnssec-validation auto;` dan menambahkan `allow-query{any;};`.
+
+#### Hasil
+![Hasil no.6](https://user-images.githubusercontent.com/52129348/138835481-251f39a7-5ff0-479f-83f5-ce69e79f9418.png)
