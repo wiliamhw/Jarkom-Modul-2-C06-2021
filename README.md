@@ -560,3 +560,55 @@ Pada **Skypiea**:
 #### Hasil
 ![Hasil 13a](https://user-images.githubusercontent.com/52129348/138885101-0bfa3267-8fc8-40a3-9f37-ac7f565be6b9.png)  
 ![Hasil 13b](https://user-images.githubusercontent.com/52129348/138885125-6835cc22-b7c2-45de-8dd1-b085c69ffaff.png)
+
+
+### No.14
+Dan Luffy meminta untuk web `www.general.mecha.franky.C06.com` hanya bisa diakses dengan port 15000 dan port 15500.
+
+#### Jawaban:
+Pada **client**, pastikan IP **Water 7** berada di atas IP **EniesLobby**.
+Pada **Skypiea**:
+1. Tuliskan kode berikut pada `/root/14.sh`:
+    ```
+    #!/bin/bash
+
+    # Download general.mecha.franky.zip dan unzip file tersebut
+    [ ! -f "general.mecha.franky.zip" ] && `wget -O general.mecha.franky.zip https://raw.githubusercontent.com/FeinardSlim/Praktikum-Modul-2-Jarkom/main/general.mecha.franky.zip`
+    [ ! -d "general.mecha.franky" ] && `unzip general.mecha.franky.zip`
+
+    # Buat folder yang menjadi document root dan dapatkan konten web dari general.mecha.franky.zip
+    `cp -r /general.mecha.franky /var/www/general.mecha.franky.C06.com`
+
+    # Buat file yang menyimpan konfigurasi DNS
+    `cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/general.mecha.franky.C06.com.conf`
+
+    # Buat konfigurasi server apache2
+    echo "
+    <VirtualHost *:15000 *:15500>
+        ServerAdmin webmaster@localhost
+
+        DocumentRoot /var/www/general.mecha.franky.C06.com
+        ServerName general.mecha.franky.C06.com
+        ServerAlias www.general.mecha.franky.C06.com
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+    </VirtualHost>
+    " > /etc/apache2/sites-available/general.mecha.franky.C06.com.conf
+
+    # Buka port 15000 dan 15500 pada Apache
+    echo "
+    Listen 15000
+    Listen 15500
+    " >> /etc/apache2/ports.conf
+
+    # Aktifkan document root tersebut
+    `a2ensite general.mecha.franky.C06.com`
+    `service apache2 restart`
+    ```
+2. Tuliskan `bash /root/14.sh` pada `/root/.bashrc`.
+
+#### Hasil
+![Hasil 14a](https://user-images.githubusercontent.com/52129348/138893936-258a2656-0ece-47b2-ade2-26227aa6eda3.png)
+![Hasil 14b](https://user-images.githubusercontent.com/52129348/138893997-867cf614-9692-46e1-9c5f-f8470df8f513.png)
+
+
