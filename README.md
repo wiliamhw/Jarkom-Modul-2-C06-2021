@@ -99,13 +99,15 @@ iface eth0 inet static
         service bind9 start
         ```
     2. Pada `/etc/resolv.conf`, tuliskan `nameserver 192.168.122.1`
-4. Pada **Skypiea**, install **apache2** dan **php7.0** serta jalankan **apache2** dengan perintah berikut:
-    ```
-    apt-get install apache2
-    service apache2 start
-    apt-get install php
-    apt-get install libapache2-mod-php7.0
-    ```
+4. Pada **Skypiea**:
+	1. Install **apache2** dan **php7.0** serta jalankan **apache2** dengan perintah berikut:
+		```
+		apt-get install apache2
+		service apache2 start
+		apt-get install php
+		apt-get install libapache2-mod-php7.0
+		```
+	2. Pada `/etc/resolv.conf`, tuliskan: `nameserver 192.168.122.1`.
 Setelah itu, konfigurasi ini akan disimpan pada `/root/.bashrc`.
 
 
@@ -322,6 +324,7 @@ Setelah itu terdapat subdomain `mecha.franky.yyy.com` dengan alias `www.mecha.fr
 Untuk memperlancar komunikasi Luffy dan rekannya, dibuatkan subdomain melalui **Water7** dengan nama `general.mecha.franky.C06.com` dengan alias `www.general.mecha.franky.C06.com` yang mengarah ke **Skypie**.
 
 #### Jawaban
+Pada **Water7**:
 1. Tuliskan kode berikut pada `/root/7.sh`.
     ```
     #!/bin/bash
@@ -365,3 +368,10 @@ Untuk memperlancar komunikasi Luffy dan rekannya, dibuatkan subdomain melalui **
 ![Hasil no.7](https://user-images.githubusercontent.com/52129348/138836907-e70d6bab-f007-43f4-8911-b2b1c0949571.png)
 
 
+### No.8
+Setelah melakukan konfigurasi server, maka dilakukan konfigurasi Webserver. Pertama dengan webserver `www.franky.C06.com`. Pertama, luffy membutuhkan webserver dengan DocumentRoot pada `/var/www/franky.C06.com`.
+
+#### Jawaban
+Pada **Skypie**:
+1. Pastikan `apache2`, `php`, dan `libapache2-mod-php7.0` sudah terinstall. (instalasi 3 hal ini sudah dilakukan saat konfigurasi awal di no.1)
+2. 
