@@ -619,7 +619,13 @@ No.14 hanya bisa diakses dengan dengan authentikasi username luffy dan password 
 
 ###Kendala yang dialami selama pengerjaan
 * VM Error
+![1022168](https://user-images.githubusercontent.com/55136116/138904967-c16dd7c1-d7da-4bb0-9c2f-504ff502ad87.jpg)
+
 * Tidak bisa mengakses ip di gns
+![1022311](https://user-images.githubusercontent.com/55136116/138904925-ea9107e0-fdd0-4d21-89c0-41aec40f4ad9.jpg)
+
 * Tidak bisa import project
+![1025651](https://user-images.githubusercontent.com/55136116/138904994-b2e91280-8b6e-40fa-a9d9-cf7361e1457e.jpg)
+
 
 
