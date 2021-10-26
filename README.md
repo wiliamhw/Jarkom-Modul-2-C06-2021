@@ -488,3 +488,26 @@ Pada **Skypiea**:
 ![Hasil 10a](https://user-images.githubusercontent.com/52129348/138857832-c5749e44-4b2d-467c-95d9-790163a7530b.png)  
 ![Hasil 10b](https://user-images.githubusercontent.com/52129348/138857876-a8e8d75b-75c9-4fed-8fc6-43ec771065ff.png)
 
+
+### No.11
+Akan tetapi, pada folder `/public`, Luffy ingin hanya dapat melakukan directory listing saja.
+
+#### Jawaban
+Pada **Skypiea**:
+1. Tuliskan kode berikut pada `/root/11.sh`:
+    ```
+    #!/bin/bash
+
+    # Tambahkan konfigurasi pada super.franky.C06.com.conf
+    echo "
+    <Directory /var/www/super.franky.C06.com>
+        Options +Indexes
+    </Directory>
+    " >> /etc/apache2/sites-available/super.franky.C06.com.conf
+    ```
+2. Tuliskan `bash /root/11.sh` pada `/root/.bashrc`.
+
+#### Hasil
+![Hasil 11a](https://user-images.githubusercontent.com/52129348/138859376-783acd7b-2570-4668-ae94-85634572db8b.png)
+![Hasil 11b](https://user-images.githubusercontent.com/52129348/138859402-753ec0e2-b92b-4c8b-9320-9f33ee6dd686.png)
+
