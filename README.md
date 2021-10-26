@@ -461,7 +461,7 @@ Pada **Skypiea**:
     [ ! -d "super.franky" ] && `unzip super.franky.zip`
 
     # Buat folder yang menjadi document root dan dapatkan konten web dari super.franky.zip
-    `cp -r super.franky /var/www/super.franky.C06.com`
+    `cp -r super.franky/. /var/www/super.franky.C06.com`
 
     # Buat file yang menyimpan konfigurasi DNS
     `cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/super.franky.C06.com.conf`
@@ -487,7 +487,7 @@ Pada **Skypiea**:
 
 #### Hasil
 ![Hasil 10a](https://user-images.githubusercontent.com/52129348/138857832-c5749e44-4b2d-467c-95d9-790163a7530b.png)  
-![Hasil 10b](https://user-images.githubusercontent.com/52129348/138857876-a8e8d75b-75c9-4fed-8fc6-43ec771065ff.png)
+![Hasil 10b](https://user-images.githubusercontent.com/52129348/138896544-a677b116-ff5f-4edc-be95-b1361b2511f6.png)
 
 
 ### No.11
@@ -577,7 +577,7 @@ Pada **Skypiea**:
     [ ! -d "general.mecha.franky" ] && `unzip general.mecha.franky.zip`
 
     # Buat folder yang menjadi document root dan dapatkan konten web dari general.mecha.franky.zip
-    `cp -r /general.mecha.franky /var/www/general.mecha.franky.C06.com`
+    `cp -r /general.mecha.franky/. /var/www/general.mecha.franky.C06.com`
 
     # Buat file yang menyimpan konfigurasi DNS
     `cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/general.mecha.franky.C06.com.conf`
@@ -610,5 +610,9 @@ Pada **Skypiea**:
 #### Hasil
 ![Hasil 14a](https://user-images.githubusercontent.com/52129348/138893936-258a2656-0ece-47b2-ade2-26227aa6eda3.png)
 ![Hasil 14b](https://user-images.githubusercontent.com/52129348/138893997-867cf614-9692-46e1-9c5f-f8470df8f513.png)
+
+
+### No.15
+No.14 hanya bisa diakses dengan dengan authentikasi username luffy dan password onepiece dan file di `/var/www/general.mecha.franky.C06`.
 
 
