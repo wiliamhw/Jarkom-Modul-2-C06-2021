@@ -385,7 +385,7 @@ Pada **Skypiea**:
     [ ! -d "franky" ] && `unzip franky.zip`
 
     # Buat folder yang menjadi document root dan dapatkan konten web dari franky.zip
-    [ ! -d "/var/www/franky.C06.com" ] && `cp -r franky /var/www/franky.C06.com`
+    `cp -r franky /var/www/franky.C06.com`
 
     # Buat file yang menyimpan konfigurasi DNS
     `cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/franky.C06.com.conf`
@@ -444,4 +444,47 @@ Pada **Skypiea**:
 #### Hasil
 ![Hasil no.9a](https://user-images.githubusercontent.com/52129348/138854956-81c8ad94-31ac-4b7d-9c66-eb8b930ab640.png)  
 ![Hasil no.9b](https://user-images.githubusercontent.com/52129348/138855014-ea5f9db5-f12e-49b2-a483-3a8db4923728.png)
+
+
+### No.10
+Setelah itu, pada subdomain `www.super.franky.C06.com`, Luffy membutuhkan penyimpanan aset yang memiliki DocumentRoot pada `/var/www/super.franky.C06.com`.
+
+#### Jawaban
+Pada **Skypiea**:
+1. Tuliskan kode berikut pada `/root/10.sh`:
+	```
+    #!/bin/bash
+
+    # Download super.franky.zip dan unzip file tersebut
+    [ ! -f "super.franky.zip" ] && `wget -O super.franky.zip https://raw.githubusercontent.com/FeinardSlim/Praktikum-Modul-2-Jarkom/main/super.franky.zip`
+    [ ! -d "super.franky" ] && `unzip super.franky.zip`
+
+    # Buat folder yang menjadi document root dan dapatkan konten web dari super.franky.zip
+    `cp -r super.franky /var/www/super.franky.C06.com`
+
+    # Buat file yang menyimpan konfigurasi DNS
+    `cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/super.franky.C06.com.conf`
+
+    # Buat konfigurasi server apache2
+    echo "
+    <VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+
+        DocumentRoot /var/www/super.franky.C06.com
+        ServerName super.franky.C06.com
+        ServerAlias www.super.franky.C06.com
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+    </VirtualHost>
+    " > /etc/apache2/sites-available/super.franky.C06.com.conf
+
+    # Aktifkan document root tersebut
+    `a2ensite super.franky.C06.com`
+    `service apache2 restart`
+    ```
+2. Tuliskan `bash /root/10.sh` pada `/root/.bashrc`.
+
+#### Hasil
+![Hasil 10a](https://user-images.githubusercontent.com/52129348/138857832-c5749e44-4b2d-467c-95d9-790163a7530b.png)  
+![Hasil 10b](https://user-images.githubusercontent.com/52129348/138857876-a8e8d75b-75c9-4fed-8fc6-43ec771065ff.png)
 
