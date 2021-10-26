@@ -385,6 +385,7 @@ Pada **Skypiea**:
     [ ! -d "franky" ] && `unzip franky.zip`
 
     # Buat folder yang menjadi document root dan dapatkan konten web dari franky.zip
+    [ ! -d "/var/www/franky.C06.com" ] && `mkdir /var/www/franky.C06.com`
     `cp -r franky /var/www/franky.C06.com`
 
     # Buat file yang menyimpan konfigurasi DNS
@@ -527,6 +528,9 @@ Pada **Skypiea**:
         ErrorDocument 404 /error/404.html
     </Directory>
     " >> /etc/apache2/sites-available/super.franky.C06.com.conf
+    
+    # Aktifkan konfigurasi tersebut
+    `service apache2 restart`
     ```
 2. Tuliskan `bash /root/12.sh` pada `/root/.bashrc`.
 
@@ -535,3 +539,24 @@ Pada **Skypiea**:
 ![Hasil 12b](https://user-images.githubusercontent.com/52129348/138882886-0c86404c-1381-4ca9-add3-694310ec9531.png)
 
 
+### No.13
+Luffy juga meminta Nami untuk dibuatkan konfigurasi virtual host. Virtual host ini bertujuan untuk dapat mengakses file asset `www.super.franky.yyy.com/public/js` menjadi `www.super.franky.yyy.com/js`.
+
+#### Jawaban
+Pada **Skypiea**:
+1. Tuliskan kode berikut pada `/root/13.sh`:
+    ```
+    #!/bin/bash
+
+    # Tambahkan konfigurasi pada super.franky.C06.com.conf
+    echo "Alias \"/js\" \"/var/www/super.franky.C06.com/public/js\"
+    " >> /etc/apache2/sites-available/super.franky.C06.com.conf
+
+    # Aktifkan konfigurasi tersebut
+    `service apache2 restart`
+    ```
+2. Tuliskan `bash /root/13.sh` pada `/root/.bashrc`.
+
+#### Hasil
+![Hasil 13a](https://user-images.githubusercontent.com/52129348/138885101-0bfa3267-8fc8-40a3-9f37-ac7f565be6b9.png)  
+![Hasil 13b](https://user-images.githubusercontent.com/52129348/138885125-6835cc22-b7c2-45de-8dd1-b085c69ffaff.png)
