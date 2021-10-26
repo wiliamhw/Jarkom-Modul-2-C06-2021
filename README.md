@@ -93,21 +93,23 @@ iface eth0 inet static
     2. Install **lynx** dengan perintah `apt get install lynx`.
     3. Install **dnsutils** dengan perintah `apt-get install dnsutils`.
 3. Pada **EniesLobby** dan **Water7**, 
-    1. install dan aktifkan **bind9** dengan perintah:
+    1. Pada `/etc/resolv.conf`, tuliskan `nameserver 192.168.122.1`
+    2. Install dan aktifkan **bind9** dengan perintah:
         ```
         apt-get install bind9 -y
         service bind9 start
         ```
-    2. Pada `/etc/resolv.conf`, tuliskan `nameserver 192.168.122.1`
 4. Pada **Skypiea**:
-	1. Install **apache2** dan **php7.0** serta jalankan **apache2** dengan perintah berikut:
+	1. Pada `/etc/resolv.conf`, tuliskan: `nameserver 192.168.122.1`.
+	2. Install **apache2** dan **php7.0** serta jalankan **apache2** dengan perintah berikut:
 		```
+        apt-get install wget
+        apt-get install unzip
 		apt-get install apache2
 		service apache2 start
 		apt-get install php
 		apt-get install libapache2-mod-php7.0
 		```
-	2. Pada `/etc/resolv.conf`, tuliskan: `nameserver 192.168.122.1`.
 Setelah itu, konfigurasi ini akan disimpan pada `/root/.bashrc`.
 
 
@@ -373,5 +375,41 @@ Setelah melakukan konfigurasi server, maka dilakukan konfigurasi Webserver. Pert
 
 #### Jawaban
 Pada **Skypie**:
-1. Pastikan `apache2`, `php`, dan `libapache2-mod-php7.0` sudah terinstall. (instalasi 3 hal ini sudah dilakukan saat konfigurasi awal di no.1)
-2. 
+1. Pastikan `wget`, `unzip`, `apache2`, `php`, dan `libapache2-mod-php7.0` sudah terinstall. (instalasi  ini sudah dilakukan saat konfigurasi awal di no.1)
+2. Tuliskan kode berikut pada `/root/8.sh`:
+    ```
+    #!/bin/bash
+
+    # Download franky.zip dan unzip file tersebut
+    [ ! -f "franky.zip" ] && `wget -O franky.zip https://raw.githubusercontent.com/FeinardSlim/Praktikum-Modul-2-Jarkom/main/franky.zip`
+    [ ! -d "franky" ] && `unzip franky.zip`
+
+    # Buat folder yang menjadi document root dan dapatkan konten web dari franky.zip
+    [ ! -d "/var/www/franky.C06.com" ] && `cp -r franky /var/www/franky.C06.com`
+
+    # Buat file yang menyimpan konfigurasi DNS
+    `cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/franky.C06.com.conf`
+
+    # Buat konfigurasi server apache2
+    echo "
+    <VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+
+        DocumentRoot /var/www/franky.C06.com
+        ServerName franky.C06.com
+        ServerAlias www.franky.C06.com
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+    </VirtualHost>
+    " > /etc/apache2/sites-available/franky.C06.com.conf
+
+    # Aktifkan document root tersebut
+    `a2ensite franky.C06.com`
+    `service apache2 restart`
+    ```
+3. Tuliskan `bash /root/8.sh` pada `/root/.bashrc`.
+
+#### Hasil
+![Hasil no.8](https://user-images.githubusercontent.com/52129348/138851685-3e532aab-a767-45d7-add5-a248d375caa7.png)
+
+
