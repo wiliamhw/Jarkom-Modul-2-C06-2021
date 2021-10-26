@@ -7,7 +7,7 @@
 
 ## Jawaban Praktikum
 ### No.1
-EniesLobby akan dijadikan sebagai DNS Master, Water7 akan dijadikan DNS Slave, dan Skypie akan digunakan sebagai Web Server. Terdapat 2 Client yaitu Loguetown, dan Alabasta. Semua node terhubung pada router Foosha, sehingga dapat mengakses internet
+EniesLobby akan dijadikan sebagai DNS Master, Water7 akan dijadikan DNS Slave, dan Skypiea akan digunakan sebagai Web Server. Terdapat 2 Client yaitu Loguetown, dan Alabasta. Semua node terhubung pada router Foosha, sehingga dapat mengakses internet
 
 ### Jawaban
 #### Topologi GNS
@@ -72,7 +72,7 @@ iface eth0 inet static
 	gateway 10.17.2.1
 ```
 
-#### Skypie GNS Interfaces (sebagai Web Server)
+#### Skypiea GNS Interfaces (sebagai Web Server)
 ```
 # Static config for eth0
 auto eth0
@@ -161,7 +161,7 @@ www     IN      CNAME   franky.C06.com.
 
 
 ### No.3
-Buat subdomain **super.franky.yyy.com** dengan alias **www.super.franky.yyy.com** yang diatur DNS nya di **EniesLobby** dan mengarah ke **Skypie**.
+Buat subdomain **super.franky.yyy.com** dengan alias **www.super.franky.yyy.com** yang diatur DNS nya di **EniesLobby** dan mengarah ke **Skypiea**.
 
 ### Jawaban
 1. Tuliskan kode berikut pada `/root/3.sh` di node **EniesLobby**:
@@ -257,7 +257,7 @@ Supaya tetap bisa menghubungi Franky jika server **EniesLobby** rusak, maka buat
 
 
 ### No.6
-Setelah itu terdapat subdomain `mecha.franky.yyy.com` dengan alias `www.mecha.franky.yyy.com` yang didelegasikan dari **EniesLobby** ke **Water7** dengan IP menuju ke **Skypie** dalam folder `sunnygo`
+Setelah itu terdapat subdomain `mecha.franky.yyy.com` dengan alias `www.mecha.franky.yyy.com` yang didelegasikan dari **EniesLobby** ke **Water7** dengan IP menuju ke **Skypiea** dalam folder `sunnygo`
 
 ### Jawaban
 #### Konfigurasi EniesLobby
@@ -309,7 +309,7 @@ Setelah itu terdapat subdomain `mecha.franky.yyy.com` dengan alias `www.mecha.fr
                              604800 )       ; Negative Cache TTL
     ;
     @       IN      NS      mecha.franky.C06.com.
-    @       IN      A       10.17.2.4       ; IP Skypie
+    @       IN      A       10.17.2.4       ; IP Skypiea
     www     IN      CNAME   mecha.franky.C06.com.
     " > /etc/bind/sunnygo/mecha.franky.C06.com
 
@@ -323,7 +323,7 @@ Setelah itu terdapat subdomain `mecha.franky.yyy.com` dengan alias `www.mecha.fr
 ![Hasil no.6](https://user-images.githubusercontent.com/52129348/138835481-251f39a7-5ff0-479f-83f5-ce69e79f9418.png)
 
 ### No.7
-Untuk memperlancar komunikasi Luffy dan rekannya, dibuatkan subdomain melalui **Water7** dengan nama `general.mecha.franky.C06.com` dengan alias `www.general.mecha.franky.C06.com` yang mengarah ke **Skypie**.
+Untuk memperlancar komunikasi Luffy dan rekannya, dibuatkan subdomain melalui **Water7** dengan nama `general.mecha.franky.C06.com` dengan alias `www.general.mecha.franky.C06.com` yang mengarah ke **Skypiea**.
 
 #### Jawaban
 Pada **Water7**:
@@ -357,7 +357,7 @@ Pada **Water7**:
                              604800 )       ; Negative Cache TTL
     ;
     @       IN      NS      general.mecha.franky.C06.com.
-    @       IN      A       10.17.2.4       ; IP Skypie
+    @       IN      A       10.17.2.4       ; IP Skypiea
     www     IN      CNAME   general.mecha.franky.C06.com.
     " > /etc/bind/sunnygo/general.mecha.franky.C06.com
 
@@ -374,7 +374,7 @@ Pada **Water7**:
 Setelah melakukan konfigurasi server, maka dilakukan konfigurasi Webserver. Pertama dengan webserver `www.franky.C06.com`. Pertama, luffy membutuhkan webserver dengan DocumentRoot pada `/var/www/franky.C06.com`.
 
 #### Jawaban
-Pada **Skypie**:
+Pada **Skypiea**:
 1. Pastikan `wget`, `unzip`, `apache2`, `php`, dan `libapache2-mod-php7.0` sudah terinstall. (instalasi  ini sudah dilakukan saat konfigurasi awal di no.1)
 2. Tuliskan kode berikut pada `/root/8.sh`:
     ```
@@ -412,4 +412,36 @@ Pada **Skypie**:
 #### Hasil
 ![Hasil no.8](https://user-images.githubusercontent.com/52129348/138851685-3e532aab-a767-45d7-add5-a248d375caa7.png)
 
+
+### No.9
+Setelah itu, Luffy juga membutuhkan agar url `www.franky.yyy.com/index.php/home` dapat menjadi menjadi `www.franky.yyy.com/home.`
+
+#### Jawaban
+Pada **Skypiea**:
+1. Tuliskan kode berikut pada `/root/9.sh`:
+    ```
+    #!/bin/bash
+
+    a2enmod rewrite
+    service apache2 restart
+
+    # Tulis .htaccess
+    echo "
+    RewriteEngine On
+    RewriteRule ^home$ index.php/home
+    " > /var/www/franky.C06.com/.htaccess
+
+    # Tambahkan konfigurasi pada franky.C06.com.conf
+    echo "
+    <Directory /var/www/franky.C06.com>
+        Options +FollowSymLinks -Multiviews
+        AllowOverride All
+    </Directory>
+    " >> /etc/apache2/sites-available/franky.C06.com.conf
+    ```
+2. Tuliskan `bash /root/9.sh` pada `/root/.bashrc`.
+
+#### Hasil
+![Hasil no.9a](https://user-images.githubusercontent.com/52129348/138854956-81c8ad94-31ac-4b7d-9c66-eb8b930ab640.png)  
+![Hasil no.9b](https://user-images.githubusercontent.com/52129348/138855014-ea5f9db5-f12e-49b2-a483-3a8db4923728.png)
 
