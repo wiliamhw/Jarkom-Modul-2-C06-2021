@@ -317,3 +317,51 @@ Setelah itu terdapat subdomain `mecha.franky.yyy.com` dengan alias `www.mecha.fr
 
 #### Hasil
 ![Hasil no.6](https://user-images.githubusercontent.com/52129348/138835481-251f39a7-5ff0-479f-83f5-ce69e79f9418.png)
+
+### No.7
+Untuk memperlancar komunikasi Luffy dan rekannya, dibuatkan subdomain melalui **Water7** dengan nama `general.mecha.franky.C06.com` dengan alias `www.general.mecha.franky.C06.com` yang mengarah ke **Skypie**.
+
+#### Jawaban
+1. Tuliskan kode berikut pada `/root/7.sh`.
+    ```
+    #!/bin/bash
+
+    # Daftarkan domain name baru
+    echo "
+    zone \"general.mecha.franky.C06.com\" {
+            type master;
+            file \"/etc/bind/sunnygo/general.mecha.franky.C06.com\";
+    };
+    " >> /etc/bind/named.conf.local
+
+    # Buat folder sunnygo dan file yang menyimpan konfigurasi DNS
+    [ ! -d "/etc/bind/sunnygo" ] && `mkdir /etc/bind/sunnygo`
+    `cp /etc/bind/db.local /etc/bind/sunnygo/general.mecha.franky.C06.com`
+
+    # Buat konfigurasi DNS
+    echo "
+    ;
+    ; BIND data file for local loopback interface
+    ;
+    \$TTL    604800
+    @       IN      SOA     general.mecha.franky.C06.com. root.general.mecha.franky.C06.com. (
+                         2021100401         ; Serial
+                             604800         ; Refresh
+                              86400         ; Retry
+                            2419200         ; Expire
+                             604800 )       ; Negative Cache TTL
+    ;
+    @       IN      NS      general.mecha.franky.C06.com.
+    @       IN      A       10.17.2.4       ; IP Skypie
+    www     IN      CNAME   general.mecha.franky.C06.com.
+    " > /etc/bind/sunnygo/general.mecha.franky.C06.com
+
+    # Restart bind9
+    `service bind9 restart`
+    ```
+2. Tuliskan `bash /root/7.sh` pada `/root/.bashrc`.
+
+#### Hasil
+![Hasil no.7](https://user-images.githubusercontent.com/52129348/138836907-e70d6bab-f007-43f4-8911-b2b1c0949571.png)
+
+
