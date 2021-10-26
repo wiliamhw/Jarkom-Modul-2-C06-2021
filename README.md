@@ -554,6 +554,7 @@ Pada **Skypiea**:
 
     # Aktifkan konfigurasi tersebut
     `service apache2 restart`
+    
     ```
 2. Tuliskan `bash /root/13.sh` pada `/root/.bashrc`.
 
@@ -604,6 +605,7 @@ Pada **Skypiea**:
     # Aktifkan document root tersebut
     `a2ensite general.mecha.franky.C06.com`
     `service apache2 restart`
+    
     ```
 2. Tuliskan `bash /root/14.sh` pada `/root/.bashrc`.
 
@@ -614,5 +616,10 @@ Pada **Skypiea**:
 
 ### No.15
 No.14 hanya bisa diakses dengan dengan authentikasi username luffy dan password onepiece dan file di `/var/www/general.mecha.franky.C06`.
+
+###Kendala yang dialami selama pengerjaan
+* VM Error
+* Tidak bisa mengakses ip di gns
+* Tidak bisa import project
 
 
