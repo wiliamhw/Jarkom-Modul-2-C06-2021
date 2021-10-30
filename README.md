@@ -11,6 +11,8 @@ EniesLobby akan dijadikan sebagai DNS Master, Water7 akan dijadikan DNS Slave, d
 
 ### Jawaban
 #### Topologi GNS
+Pada kelompok kami setting network configurationnya menyesuaikan dengan prefix IP dari kelompok kami yaitu 10.17
+
 ![Topologi GNS](https://user-images.githubusercontent.com/52129348/138724448-efea0761-f7ee-4cbb-a147-abc2961b71d1.png)
 
 #### Foosha GNS Interfaces (sebagai Router)
@@ -112,6 +114,10 @@ iface eth0 inet static
 		```
 Setelah itu, konfigurasi ini akan disimpan pada `/root/.bashrc`.
 
+Keterangan :
+* `iptables`: iptables merupakan suatu tools dalam sistem operasi Linux yang berfungsi sebagai filter terhadap lalu lintas data.
+* `NAT` (Network Address Translation): Suatu metode penafsiran alamat jaringan yang digunakan untuk menghubungkan lebih dari satu komputer ke jaringan internet dengan menggunakan satu alamat IP.
+* `Masquerade`: Digunakan untuk menyamarkan paket, misal mengganti alamat pengirim dengan alamat router. -s (Source Address): Spesifikasi pada source. Address bisa berupa nama jaringan, nama host, atau alamat IP.
 
 ### No.2
 Pada node **EniesLobby** dan di dalam folder **kaizoku**, buat wesite utama dengan URL **franky.C06.com** dan alias **www.franky.C06.com**!
@@ -156,6 +162,12 @@ www     IN      CNAME   franky.C06.com.
 ```
 2. Tuliskan `bash /root/2.sh` pada `/root/.bashrc` di node **EniesLobby**.
 
+Keterangan :
+* Konfigurasikan zone untuk membuat settingan website pada dns di dns lobby kemudian copy db ek folder kaizoku dengan web franky.C06.com
+* Setelah itu copykan db local ke folder kaizoku
+* Kemudian pada SOA dan cname ubah template menjadi franky.C06.com dan beri www pada cname
+* Restart bind service untuk menjalankan perubahan pada dns
+
 #### Hasil
 ![Hasil no.2](https://user-images.githubusercontent.com/52129348/138732437-fca89a63-2e96-4478-a4ec-43388a433967.png)
 
@@ -178,6 +190,11 @@ Buat subdomain **super.franky.yyy.com** dengan alias **www.super.franky.yyy.com*
     `service bind9 restart`
     ```
 2. Tuliskan `bash /root/3.sh` pada `/root/.bashrc` di node **EniesLobby**. 
+
+Keterangan : 
+* Pada konfigurasi di EniiesLobby tambahkan super dengan A pada ip Skypie
+* Kemudian tambahkan cname dengan www.super pada domain super.franky.C06.com
+* Restart bind service untuk menjalankan perubahan pada dns
 
 #### Hasil
 ![Hasil no.3](https://user-images.githubusercontent.com/52129348/138736381-6e9686a2-ea74-45e3-b579-7fbeaf88d308.png)
@@ -225,6 +242,12 @@ Buat reverse domain untuk domain utama.
     ```
 2. Tuliskan `bash /root/4.sh` pada `/root/.bashrc` di node **EniesLobby**. 
 
+Keterangan : 
+* Konfigurasi pada EnniesLobby menggunakan 3 byte pertama IP dan ditambahkan in-addr.arpa
+* Setelah itu copykan db local ke folder kaizoku
+* Kemudian konfigurasikan NS dan PTR dengan byte ke 4 pada PTR
+* Restart bind service untuk menjalankan perubahan pada dns
+
 #### Hasil
 ![Hasil no.4](https://user-images.githubusercontent.com/52129348/138739394-a5f12cb8-2a17-4e25-95f2-9c94039eb5bd.png)
 
@@ -251,6 +274,10 @@ Supaya tetap bisa menghubungi Franky jika server **EniesLobby** rusak, maka buat
         file "/var/lib/bind/franky.C06.com";
     };
     ```
+
+Keterangan : 
+* Pada konfigurasi dns di Ennies lobby, ubah type menjadi master dan memberikan notifiy serta allow apda IP Water7
+* Water7 membuat configurasi dns dengan type slave dan menjadikan IP EnniesLobby sebagai master dengan direvtory yang diminta
 
 #### Hasil
 ![Screenshot from 2021-10-26 00-42-59](https://user-images.githubusercontent.com/52129348/138744230-a22ad90a-b5ba-4cac-8c3f-2a3f41b89e3b.png)
@@ -319,6 +346,14 @@ Setelah itu terdapat subdomain `mecha.franky.yyy.com` dengan alias `www.mecha.fr
 3. Tuliskan `bash /root/6.sh` pada `/root/.bashrc.
 4. Edit file `/etc/bind/named.conf.options` dengan mengkomen `dnssec-validation auto;` dan menambahkan `allow-query{any;};`.
 
+Keterangan : 
+* Pada EnniesLobby gunakan ns2 untuk mendelegasikan domain baru kepada Water7 dengan IP Water7
+* Kemudian restart service bind untuk menjalankan perubahan dns
+* Kemudian pada conf option tambahkan allow query any di bawah dnssec-validation-auto
+* Pada Water7 buat configurasi untuk mecha franky terutama configurasi db local ke foolder sunnygo dengan subdomain mecha tersebut
+* pada pengaturan dns bweikan www dengan cname mecha franky dan IP Skypie
+* Restart bind service untuk menjalankan perubahan pada dns
+
 #### Hasil
 ![Hasil no.6](https://user-images.githubusercontent.com/52129348/138835481-251f39a7-5ff0-479f-83f5-ce69e79f9418.png)
 
@@ -366,6 +401,11 @@ Pada **Water7**:
     ```
 2. Tuliskan `bash /root/7.sh` pada `/root/.bashrc`.
 
+Keterangan : 
+* Buat subdomain baru pada zone general mecha dan copy ke folder sunnygo 
+* Kemudian konfigurasikan www dengan cname general ke domain mecha
+* Restart bind service untuk menjalankan perubahan pada dns
+
 #### Hasil
 ![Hasil no.7](https://user-images.githubusercontent.com/52129348/138836907-e70d6bab-f007-43f4-8911-b2b1c0949571.png)
 
@@ -386,7 +426,7 @@ Pada **Skypiea**:
 
     # Buat folder yang menjadi document root dan dapatkan konten web dari franky.zip
     [ ! -d "/var/www/franky.C06.com" ] && `mkdir /var/www/franky.C06.com`
-    `cp -r franky/. /var/www/franky.C06.com`
+    `cp -r franky /var/www/franky.C06.com`
 
     # Buat file yang menyimpan konfigurasi DNS
     `cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/franky.C06.com.conf`
@@ -617,7 +657,7 @@ Pada **Skypiea**:
 ### No.15
 No.14 hanya bisa diakses dengan dengan authentikasi username luffy dan password onepiece dan file di `/var/www/general.mecha.franky.C06`.
 
-### Kendala yang dialami selama pengerjaan
+###Kendala yang dialami selama pengerjaan
 * VM Error
 ![1022168](https://user-images.githubusercontent.com/55136116/138904967-c16dd7c1-d7da-4bb0-9c2f-504ff502ad87.jpg)
 
