@@ -386,7 +386,7 @@ Pada **Skypiea**:
 
     # Buat folder yang menjadi document root dan dapatkan konten web dari franky.zip
     [ ! -d "/var/www/franky.C06.com" ] && `mkdir /var/www/franky.C06.com`
-    `cp -r franky /var/www/franky.C06.com`
+    `cp -r franky/. /var/www/franky.C06.com`
 
     # Buat file yang menyimpan konfigurasi DNS
     `cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/franky.C06.com.conf`
@@ -617,7 +617,7 @@ Pada **Skypiea**:
 ### No.15
 No.14 hanya bisa diakses dengan dengan authentikasi username luffy dan password onepiece dan file di `/var/www/general.mecha.franky.C06`.
 
-###Kendala yang dialami selama pengerjaan
+### Kendala yang dialami selama pengerjaan
 * VM Error
 ![1022168](https://user-images.githubusercontent.com/55136116/138904967-c16dd7c1-d7da-4bb0-9c2f-504ff502ad87.jpg)
 
